@@ -34,23 +34,50 @@
   nav ul a{font-size:12px;letter-spacing:.2em;text-transform:uppercase;font-weight:600;color:var(--dim-dark);transition:color .2s}
   header.scrolled nav ul a{color:var(--pine)}
   nav ul a:hover{color:var(--sign)}
+  .nav-toggle{display:none;position:relative;width:44px;height:44px;border:0;background:none;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+  /* bars sit stacked on the button's centre so the open state is a true X */
+  .nav-toggle .bar{position:absolute;left:50%;top:50%;width:23px;height:2.4px;margin:-1.2px 0 0 -11.5px;border-radius:2px;background:var(--deep);transition:transform .25s ease,opacity .18s ease}
+  .nav-toggle .bar:nth-child(1){transform:translateY(-7px)}
+  .nav-toggle .bar:nth-child(3){transform:translateY(7px)}
+  .nav-toggle[aria-expanded="true"] .bar:nth-child(1){transform:rotate(45deg)}
+  .nav-toggle[aria-expanded="true"] .bar:nth-child(2){opacity:0}
+  .nav-toggle[aria-expanded="true"] .bar:nth-child(3){transform:rotate(-45deg)}
 
-  /* ---------- hero ---------- */
-  .hero{position:relative;height:100vh;min-height:640px;background:radial-gradient(ellipse 70% 54% at 50% 18%,#ffffff 0%,#ffffff 60%,rgba(255,255,255,0) 100%),linear-gradient(180deg,#f2f4ea 0%,#f2ecd2 38%,#f2e2b8 72%,#edd6a3 100%);overflow:hidden}
+  /* ---------- hero ----------
+     The scene is one 1440x560 composition split across parallax layers.
+     --sw is how wide that composition is drawn and --sx how far it is pushed
+     left, so together they crop it: wider + further left = a closer framing.
+     Mobile uses that to zoom into the cabin / tower / mountain instead of
+     shrinking the whole panorama down to a sliver. */
+  .hero{position:relative;height:100vh;min-height:640px;background:radial-gradient(ellipse 70% 54% at 50% 18%,#ffffff 0%,#ffffff 60%,rgba(255,255,255,0) 100%),linear-gradient(180deg,#f2f4ea 0%,#f2ecd2 38%,#f2e2b8 72%,#edd6a3 100%);overflow:hidden;
+    --sx:-3vw; --sw:106vw; --mtn-x:0vw; --plane-y:47%;
+    --glow-x:64%; --glow-y:14%; --glow-w:68vw; --glow-h:44vh}
   .hero-top{position:relative;z-index:3;display:flex;flex-direction:column;align-items:center;padding-top:9vh}
-  .hero-logo{width:min(330px,62vw)}
+  .hero-logo{width:min(330px,62vw);aspect-ratio:auto 440/376}
   .hero-logo video,.hero-logo img{width:100%;height:auto;display:block;mix-blend-mode:multiply}
-  .hero h1{font-family:"Fredoka","Inter","Helvetica Neue",sans-serif;font-size:clamp(28px,3.2vw,40px);font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--deep);margin-top:-2px;text-align:center}
+  /* hold the logo hidden until the first video frame is actually on screen,
+     otherwise the browser flashes the poster/last frame before playback starts */
+  .hero-logo video{opacity:0;transition:opacity .2s ease}
+  .hero-logo video.is-playing{opacity:1}
+  .hero-logo .logo-still{display:none}
+  .hero-logo.still-only video{display:none}
+  .hero-logo.still-only .logo-still{display:block}
+  .hero h1{font-family:"Fredoka","Inter","Helvetica Neue",sans-serif;font-size:clamp(28px,3.2vw,40px);font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--deep);margin-top:-2px;text-align:center;max-width:100%;padding:0 16px}
   .hero h1 .st2{color:var(--sign);text-shadow:0 2px 0 rgba(30,65,70,.18)}
 
   /* parallax scene */
   .scape{position:absolute;left:0;right:0;bottom:-2px;height:72vh;min-height:460px;pointer-events:none;z-index:1}
-  .layer{position:absolute;left:-3%;right:-3%;bottom:0;will-change:transform}
+  .layer{position:absolute;left:var(--sx);width:var(--sw);bottom:0;will-change:transform}
+  /* the mountain can slide independently so the summit stays in frame when cropped */
+  .layer.mtn{left:calc(var(--sx) + var(--mtn-x))}
   .layer svg{display:block;width:100%;height:auto}
-  .glow{position:absolute;left:64%;bottom:26%;width:68vw;height:44vh;transform:translateX(-50%);background:radial-gradient(ellipse at 50% 80%,rgba(228,176,84,.45),rgba(228,176,84,0) 68%);z-index:0}
+  /* the gradient has to reach zero alpha exactly at the box edge, otherwise the
+     cut-off leaves a visible rectangular seam over the sky */
+  .glow{position:absolute;left:var(--glow-x);bottom:var(--glow-y);width:var(--glow-w);height:var(--glow-h);transform:translateX(-50%);z-index:0;
+    background:radial-gradient(farthest-side ellipse at 50% 50%,rgba(228,176,84,.42) 0%,rgba(228,176,84,.31) 32%,rgba(228,176,84,.13) 64%,rgba(228,176,84,.03) 86%,rgba(228,176,84,0) 100%)}
 
   /* airplane — crosses at summit height, in front of the mountain */
-  .plane{position:absolute;top:47%;left:0;z-index:2;width:74px;opacity:0;animation:fly 52s linear infinite;animation-delay:3s}
+  .plane{position:absolute;top:var(--plane-y);left:0;z-index:2;width:74px;opacity:0;animation:fly 52s linear infinite;animation-delay:3s}
   .plane svg{display:block;width:100%;height:auto}
   @keyframes fly{
     0%{transform:translate(-12vw,0);opacity:0}
@@ -59,7 +86,7 @@
     97%{opacity:.85}
     100%{transform:translate(114vw,-6vh);opacity:0}
   }
-  .contrail{position:absolute;top:calc(47% + 9px);left:0;z-index:1;height:2px;width:0;background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.75));border-radius:2px;animation:trail 52s linear infinite;animation-delay:3s;opacity:0}
+  .contrail{position:absolute;top:calc(var(--plane-y) + 9px);left:0;z-index:1;height:2px;width:0;background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.75));border-radius:2px;animation:trail 52s linear infinite;animation-delay:3s;opacity:0}
   @keyframes trail{
     0%{width:0;transform:translate(-12vw,0);opacity:0}
     3%{opacity:.6}
@@ -73,11 +100,13 @@
   /* sasquatch: deep in the forest, behind two tree layers, just peeking over the mid crest */
   .squatch{position:absolute;bottom:5%;left:0;height:31%;aspect-ratio:228/498;opacity:0;animation:lurk 84s linear infinite;animation-delay:10s;will-change:transform}
   .squatch img{display:block;width:100%;height:100%;object-fit:contain;animation:amble .7s ease-in-out infinite alternate;transform-origin:50% 92%}
+  /* travel is measured from the layer's own left edge, which sits at --sx,
+     so the walk still enters and exits past the screen edges when cropped */
   @keyframes lurk{
-    0%{transform:translateX(102vw);opacity:0}
+    0%{transform:translateX(calc(101vw - var(--sx)));opacity:0}
     2%{opacity:.9}
-    56%{transform:translateX(-8vw);opacity:.9}
-    58%,100%{transform:translateX(-10vw);opacity:0}
+    56%{transform:translateX(calc(-9vw - var(--sx)));opacity:.9}
+    58%,100%{transform:translateX(calc(-11vw - var(--sx)));opacity:0}
   }
   @keyframes amble{
     from{transform:translateY(0) rotate(-1.5deg)}
@@ -155,10 +184,41 @@
   @media(max-width:900px){
     .feature{grid-template-columns:1fr}
     .grid{grid-template-columns:1fr 1fr}
-    nav ul{display:none}
-    .hero-top{padding-top:12vh}
+    .hero-top{padding-top:11vh}
+    .nav-toggle{display:grid}
+    /* the desktop row becomes a drop panel; kept in the DOM so it stays focusable */
+    nav ul{position:absolute;top:60px;right:0;flex-direction:column;gap:0;min-width:200px;padding:7px;
+      background:linear-gradient(180deg,#f7f4e6 0%,#f1e4c1 100%);border:1px solid rgba(30,65,70,.16);border-radius:14px;
+      box-shadow:0 16px 34px rgba(14,34,38,.20);opacity:0;visibility:hidden;transform:translateY(-8px) scale(.98);transform-origin:100% 0;
+      transition:opacity .2s ease,transform .2s ease,visibility .2s}
+    nav ul.open{opacity:1;visibility:visible;transform:none}
+    nav ul li{border-bottom:1px solid rgba(30,65,70,.10)}
+    nav ul li:last-child{border-bottom:0}
+    nav ul a,header.scrolled nav ul a{display:block;padding:15px 18px;font-size:12.5px;color:var(--pine)}
+    nav ul a:active{color:var(--sign)}
   }
-  @media(max-width:600px){.grid{grid-template-columns:1fr}}
+  /* phones: crop into the scene instead of shrinking the whole panorama */
+  @media(max-width:700px){
+    /* frames the scene on the street sign at the left through to the summit:
+       cabin ~11%, tower ~74%, peak ~62% across, scene ~35% of the screen */
+    .hero{--sx:-56vw; --sw:195vw; --mtn-x:-28vw; --plane-y:58%;
+          --glow-x:58%; --glow-y:18%; --glow-w:132vw; --glow-h:38vh}
+    .hero-top{padding-top:8vh}
+    .hero-logo{width:min(300px,56vw)}
+    .hero h1{font-size:clamp(17px,5.9vw,26px)}
+    /* stands taller over the crest so he's actually recognisable at phone size */
+    .squatch{height:40%;bottom:10%}
+  }
+  /* landscape phones are too short for the tall crop — keep the wide framing */
+  @media(max-width:700px) and (max-height:540px){
+    .hero{--sx:-3vw; --sw:106vw; --mtn-x:0vw; --plane-y:47%;
+          --glow-x:64%; --glow-y:14%; --glow-w:68vw; --glow-h:44vh}
+    .hero-top{padding-top:4vh}
+  }
+  @media(max-width:600px){
+    .grid{grid-template-columns:1fr}
+    .wrap{padding:0 20px}
+  }
   @media(prefers-reduced-motion:reduce){
     .layer{transform:none!important}
     .plane,.contrail{animation:none;opacity:0}
@@ -172,23 +232,61 @@
   <div class="wrap">
     <nav>
       <a class="brand" href="#top" aria-label="Smoketree Studios home"><img src="assets/logo-mark.png" alt="Smoketree Studios sign logo"></a>
-      <ul>
+      <ul id="navMenu">
         <li><a href="#games">Games</a></li>
         <li><a href="#about">About</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
+      <button class="nav-toggle" id="navToggle" type="button" aria-label="Menu" aria-expanded="false" aria-controls="navMenu">
+        <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+      </button>
     </nav>
   </div>
 </header>
 
 <div class="hero" id="top">
   <div class="hero-top">
-    <div class="hero-logo">
-      <video id="logoVid" autoplay muted playsinline preload="auto" poster="assets/logo-still.png">
+    <div class="hero-logo" id="heroLogo">
+      <video id="logoVid" autoplay muted playsinline preload="auto" aria-hidden="true">
         <source src="assets/logo-anim.mp4" type="video/mp4">
-        <img src="assets/logo-still.png" alt="Smoketree Studios">
       </video>
+      <img class="logo-still" src="assets/logo-still.png" alt="Smoketree Studios">
     </div>
+    <script>
+    /* ---------- intro logo ----------
+       Runs inline, right after the element, so it hooks playback before any
+       frame is presented. The video is held at opacity 0 until a real frame
+       is on screen, so the browser never flashes the first/last frame before
+       the animation starts. Reduced motion, blocked autoplay or a load error
+       all fall back to the still frame. */
+    (function(){
+      var wrap = document.getElementById('heroLogo');
+      var v = document.getElementById('logoVid');
+      var settled = false;
+      function showStill(){ if(settled) return; settled = true; wrap.classList.add('still-only'); v.pause(); }
+      function reveal(){ if(settled) return; settled = true; v.classList.add('is-playing'); }
+
+      v.addEventListener('ended', function(){ v.pause(); });
+      v.addEventListener('error', showStill);
+
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches){
+        v.removeAttribute('autoplay');
+        showStill();
+        return;
+      }
+      if ('requestVideoFrameCallback' in v){
+        v.requestVideoFrameCallback(function(){ reveal(); });
+      } else {
+        // no frame callback: wait for playback, then one painted frame
+        v.addEventListener('playing', function(){
+          requestAnimationFrame(function(){ requestAnimationFrame(reveal); });
+        }, {once:true});
+      }
+      var p = v.play();
+      if (p && p.catch) p.catch(showStill);
+      setTimeout(showStill, 4000); // never leave the logo blank
+    })();
+    </script>
     <h1>Smoketree <span class="st2">Studios</span></h1>
   </div>
 
@@ -205,7 +303,7 @@
   <div class="glow"></div>
   <div class="scape">
     <!-- Mount Rainier -->
-    <div class="layer" data-speed="0.05" data-mx="2">
+    <div class="layer mtn" data-speed="0.05" data-mx="2">
       <svg viewBox="0 0 1440 560" preserveAspectRatio="xMidYMax slice" style="width:100%;height:auto">
         <defs>
           <linearGradient id="hazeGrad" x1="0" y1="0" x2="0" y2="1">
@@ -439,8 +537,27 @@
   addEventListener('scroll', () => { scrollY_ = window.scrollY; queue(); }, {passive:true});
   queue();
 
-  const v = document.getElementById('logoVid');
-  v.addEventListener('ended', () => { v.pause(); });
+  /* ---------- mobile menu ---------- */
+  const navBtn = document.getElementById('navToggle');
+  const navMenu = document.getElementById('navMenu');
+  function setMenu(open){
+    navMenu.classList.toggle('open', open);
+    navBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+  navBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    setMenu(navBtn.getAttribute('aria-expanded') !== 'true');
+  });
+  navMenu.addEventListener('click', e => { if(e.target.closest('a')) setMenu(false); });
+  document.addEventListener('click', e => {
+    if(!e.target.closest('nav')) setMenu(false);
+  });
+  addEventListener('keydown', e => {
+    if(e.key === 'Escape' && navBtn.getAttribute('aria-expanded') === 'true'){ setMenu(false); navBtn.focus(); }
+  });
+  // a resize past the breakpoint leaves the panel styling behind otherwise
+  matchMedia('(min-width:901px)').addEventListener('change', () => setMenu(false));
+
 </script>
 </body>
 </html>
