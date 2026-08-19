@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smoketree Studios — V2 Warm Illustrated</title>
+<style>
+  :root{
+    --sky1:#2d1b3d; --sky2:#7a2d4e; --sky3:#c9503c; --sky4:#e8873a; --sun:#f5c15c;
+    --paper:#faf3e7; --ink:#3a2a28; --dim:#8a6f63; --accent:#c9503c; --card:#ffffff;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--paper);color:var(--ink);font-family:Georgia,"Times New Roman",serif;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1140px;margin:0 auto;padding:0 32px}
+  .sans{font-family:"Avenir Next","Segoe UI",Verdana,sans-serif}
+
+  .hero{position:relative;height:92vh;min-height:560px;overflow:hidden;background:linear-gradient(180deg,var(--sky1) 0%,var(--sky2) 34%,var(--sky3) 60%,var(--sky4) 80%,var(--sun) 100%)}
+  .hero svg.layers{position:absolute;bottom:-2px;left:0;width:100%;height:60%;display:block}
+  .hero .sun{position:absolute;left:50%;top:46%;width:130px;height:130px;margin-left:-65px;border-radius:50%;background:radial-gradient(circle,#ffe9b0,#f5c15c 60%,rgba(245,193,92,0));box-shadow:0 0 90px 40px rgba(245,193,92,.35)}
+  .hero-content{position:absolute;top:0;left:0;right:0;z-index:3;text-align:center;padding-top:14vh;color:#fff}
+  .logo-slot{width:96px;height:96px;margin:0 auto 28px;display:grid;place-items:center}
+  .logo-slot svg{width:100%;height:100%}
+  .hero h1{font-size:clamp(40px,7vw,84px);font-weight:400;letter-spacing:.02em;text-shadow:0 2px 24px rgba(45,27,61,.5)}
+  .hero p{margin-top:14px;font-size:17px;font-style:italic;opacity:.92}
+  .hero nav{position:absolute;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;padding:26px 40px;z-index:4}
+  .hero nav .brand{font-size:15px;letter-spacing:.2em;text-transform:uppercase;color:#fff}
+  .hero nav ul{display:flex;gap:32px;list-style:none}
+  .hero nav a{color:rgba(255,255,255,.85);font-size:13px;letter-spacing:.14em;text-transform:uppercase}
+  .hero nav a:hover{color:#fff}
+
+  section{padding:96px 0}
+  h2.sec{font-size:34px;font-weight:400;margin-bottom:12px}
+  .sec-sub{color:var(--dim);font-style:italic;margin-bottom:56px}
+
+  .feature{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;margin-bottom:88px}
+  .feature:nth-child(even){direction:rtl}
+  .feature>*{direction:ltr}
+  .feature .art{border-radius:18px;overflow:hidden;box-shadow:0 24px 60px -20px rgba(58,42,40,.35);aspect-ratio:460/215;background:#2d1b3d}
+  .feature .art img{width:100%;height:100%;object-fit:cover;display:block}
+  .feature h3{font-size:30px;font-weight:400;margin-bottom:12px}
+  .feature .tags{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+  .feature p{font-size:16px;line-height:1.8;color:#5d4a44;margin-bottom:24px}
+  .btn{display:inline-block;background:var(--accent);color:#fff;padding:13px 30px;border-radius:100px;font-size:13px;letter-spacing:.14em;text-transform:uppercase;transition:background .2s;box-shadow:0 8px 20px -8px rgba(201,80,60,.6)}
+  .btn:hover{background:#a83c2c}
+
+  .catalog{background:linear-gradient(180deg,var(--paper),#f3e6d2)}
+  .cards{display:grid;grid-template-columns:repeat(2,1fr);gap:28px}
+  .card{background:var(--card);border-radius:16px;overflow:hidden;box-shadow:0 14px 40px -16px rgba(58,42,40,.25);transition:transform .25s}
+  .card:hover{transform:translateY(-4px)}
+  .card .thumb{aspect-ratio:460/215;overflow:hidden;background:#2d1b3d}
+  .card .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+  .card .thumb .ph{width:100%;height:100%;display:grid;place-items:center;font-size:40px}
+  .ph-alch{background:linear-gradient(135deg,#8e5a2b,#d9b382)}
+  .ph-dye{background:linear-gradient(135deg,#e63946,#f4a261)}
+  .card .body{padding:26px 28px 30px}
+  .card h3{font-size:22px;font-weight:400;margin-bottom:6px}
+  .card .meta{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);margin-bottom:12px}
+  .card p{font-size:15px;line-height:1.7;color:#5d4a44;margin-bottom:16px}
+  .card .store{color:var(--accent);font-size:14px;font-style:italic}
+  .card .store:hover{text-decoration:underline}
+
+  .about-band{background:var(--sky1);color:#f3e6d2;text-align:center}
+  .about-band .inner{max-width:660px;margin:0 auto}
+  .about-band p{font-size:20px;line-height:1.9;font-style:italic}
+  .about-band p+p{margin-top:20px;font-style:normal;font-size:16px;color:#c4a8b8}
+
+  footer{padding:44px 0;text-align:center;color:var(--dim);font-size:14px}
+  footer .links{margin-bottom:14px;display:flex;justify-content:center;gap:30px}
+  footer .links a{color:var(--accent)}
+  footer .links a:hover{text-decoration:underline}
+
+  @media(max-width:860px){
+    .feature{grid-template-columns:1fr}
+    .feature:nth-child(even){direction:ltr}
+    .cards{grid-template-columns:1fr}
+    .hero nav ul{display:none}
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <nav class="sans">
+    <span class="brand">Smoketree Studios</span>
+    <ul>
+      <li><a href="#games">Games</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="sun"></div>
+  <div class="hero-content">
+    <div class="logo-slot" title="Animated logo goes here">
+      <!-- LOGO SLOT: replace with animated logo -->
+      <svg viewBox="0 0 100 100" fill="none">
+        <path d="M50 90 L50 56" stroke="#faf3e7" stroke-width="3"/>
+        <path d="M50 62 C28 56 24 34 32 20 C40 33 48 29 50 16 C52 29 60 33 68 20 C76 34 72 56 50 62Z" fill="#faf3e7"/>
+        <path d="M50 16 C50 9 56 7 58 3" stroke="#f5c15c" stroke-width="2.5" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <h1>Smoketree Studios</h1>
+    <p>Little games, made with care.</p>
+  </div>
+  <svg class="layers" viewBox="0 0 1440 400" preserveAspectRatio="none">
+    <path d="M0 220 L120 200 240 240 400 180 560 230 720 170 900 225 1080 185 1250 230 1440 195 1440 400 0 400Z" fill="#5c2344" opacity=".85"/>
+    <path d="M0 280 L160 250 320 290 520 240 700 285 880 245 1060 290 1260 255 1440 285 1440 400 0 400Z" fill="#3d1a35"/>
+    <path d="M0 335 L200 310 420 345 640 305 860 345 1100 310 1300 345 1440 320 1440 400 0 400Z" fill="#2d1b3d"/>
+    <g fill="#22142e">
+      <path d="M180 400 L180 330 M180 336 C160 330 158 312 164 300 C170 310 177 307 180 296 C183 307 190 310 196 300 C202 312 200 330 180 336Z"/>
+      <path d="M1240 400 L1240 320 M1240 328 C1216 320 1214 298 1222 284 C1229 296 1237 292 1240 279 C1243 292 1251 296 1258 284 C1266 298 1264 320 1240 328Z"/>
+    </g>
+  </svg>
+</div>
+
+<section id="games">
+  <div class="wrap">
+    <h2 class="sec">Our Games</h2>
+    <p class="sec-sub">Cozy sims, logic RPGs, and VR experiments — on Steam and Google Play.</p>
+
+    <div class="feature">
+      <a class="art" href="https://store.steampowered.com/app/4729080/Lil_Laundry_Lane/" target="_blank" rel="noopener">
+        <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/4729080/6c296191fe0581f0237f4b412850c2b467096441/header.jpg?t=1781119948" alt="Lil Laundry Lane key art">
+      </a>
+      <div>
+        <div class="tags sans">Cozy Sim · Coming Soon</div>
+        <h3>Lil Laundry Lane</h3>
+        <p>Run a hand-painted little laundromat that's all yours. Take in orders from the neighborhood's regulars, tend each load with care, and sink into the soothing rhythm of cleaning clothes.</p>
+        <a class="btn sans" href="https://store.steampowered.com/app/4729080/Lil_Laundry_Lane/" target="_blank" rel="noopener">Wishlist on Steam</a>
+      </div>
+    </div>
+
+    <div class="feature">
+      <a class="art" href="https://store.steampowered.com/app/4109840/DungeonSweeper/" target="_blank" rel="noopener">
+        <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/4109840/e5606abdadb3c8ead27392ba47449f22993c8f69/header.jpg?t=1778524847" alt="DungeonSweeper key art">
+      </a>
+      <div>
+        <div class="tags sans">Roguelite RPG · Out Now</div>
+        <h3>DungeonSweeper</h3>
+        <p>Minesweeper-style combat meets the dungeon crawl. Level through 5 dungeons with 21 classes and 80+ items on your way to the Dragon — on Steam and Android.</p>
+        <a class="btn sans" href="https://store.steampowered.com/app/4109840/DungeonSweeper/" target="_blank" rel="noopener">Play Now</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="catalog">
+  <div class="wrap">
+    <h2 class="sec">From the Archive</h2>
+    <p class="sec-sub">Earlier releases, still out there.</p>
+    <div class="cards">
+      <div class="card">
+        <div class="thumb"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/542570/header.jpg" alt="RunVR"></div>
+        <div class="body">
+          <h3>RunVR</h3>
+          <div class="meta sans">VR · Steam · 2017</div>
+          <p>Run, jump, and climb through virtual worlds with natural arm-swinging locomotion.</p>
+          <a class="store" href="https://store.steampowered.com/app/542570/RunVR/" target="_blank" rel="noopener">View on Steam →</a>
+        </div>
+      </div>
+      <div class="card">
+        <div class="thumb"><img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/517770/header.jpg" alt="Caketomino"></div>
+        <div class="body">
+          <h3>Caketomino</h3>
+          <div class="meta sans">VR Puzzle · Steam · 2016</div>
+          <p>A puzzle game about cakes — build all 30 pentomino puzzles in room-scale VR.</p>
+          <a class="store" href="https://store.steampowered.com/app/517770/Caketomino/" target="_blank" rel="noopener">View on Steam →</a>
+        </div>
+      </div>
+      <div class="card">
+        <div class="thumb"><div class="ph ph-alch">⚗️</div></div>
+        <div class="body">
+          <h3>Alchehistory</h3>
+          <div class="meta sans">Match-3 · Android</div>
+          <p>Combine elements to craft new discoveries through history, one match at a time.</p>
+          <a class="store" href="https://play.google.com/store/apps/details?id=com.SmoketreeStudios.Trees.Alchehistory" target="_blank" rel="noopener">Get on Google Play →</a>
+        </div>
+      </div>
+      <div class="card">
+        <div class="thumb"><div class="ph ph-dye">🎨</div></div>
+        <div class="body">
+          <h3>SLicense to Dye</h3>
+          <div class="meta sans">Strategy · Android</div>
+          <p>Defend against lice invaders using strategic color-matching mechanics.</p>
+          <a class="store" href="https://play.google.com/store/apps/details?id=com.SmoketreeStudios.SLicensetoDye" target="_blank" rel="noopener">Get on Google Play →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="about-band" id="about">
+  <div class="wrap">
+    <div class="inner">
+      <p>"We make small, focused games and ship them."</p>
+      <p>Smoketree Studios is an independent game label built by developers with AAA experience who'd rather make weird little games. Based on the west coast, published everywhere.</p>
+    </div>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="wrap">
+    <div class="links sans">
+      <a href="https://store.steampowered.com/search/?developer=Smoketree%20Studios" target="_blank" rel="noopener">Steam</a>
+      <a href="https://play.google.com/store/apps/developer?id=Smoketree+Studios" target="_blank" rel="noopener">Google Play</a>
+      <a href="mailto:contact@smoketreestudios.com">Contact</a>
+    </div>
+    © 2026 Smoketree Studios
+  </div>
+</footer>
+</body>
+</html>
