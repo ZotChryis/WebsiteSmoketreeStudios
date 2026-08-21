@@ -47,7 +47,10 @@
   .scape{position:absolute;left:0;right:0;bottom:-2px;height:72vh;min-height:460px;pointer-events:none;z-index:1}
   .layer{position:absolute;left:-3%;right:-3%;bottom:0;will-change:transform}
   .layer svg{display:block;width:100%;height:auto}
-  .glow{position:absolute;left:64%;bottom:26%;width:68vw;height:44vh;transform:translateX(-50%);background:radial-gradient(ellipse at 50% 80%,rgba(228,176,84,.45),rgba(228,176,84,0) 68%);z-index:0}
+  .sun{position:absolute;top:9%;left:83%;width:min(110px,8.2vw);z-index:1;pointer-events:none;will-change:transform;filter:drop-shadow(0 0 28px rgba(255,220,130,.9)) drop-shadow(0 0 80px rgba(255,195,100,.5))}
+  .sun svg{display:block;width:100%;height:auto}
+  @media(max-width:840px){.sun{top:11%}}
+  .glow{position:absolute;left:64%;bottom:26%;width:68vw;height:44vh;transform:translateX(-50%);background:radial-gradient(ellipse 32vw 20vh at 50% 55%,rgba(228,176,84,.45),rgba(228,176,84,0) 72%);background-repeat:no-repeat;z-index:0}
 
   /* airplane — crosses at summit height, in front of the mountain */
   .plane{position:absolute;top:47%;left:0;z-index:2;width:74px;opacity:0;animation:fly 52s linear infinite;animation-delay:3s}
@@ -165,6 +168,12 @@
     .plane,.contrail{animation:none;opacity:0}
     .scroll-cue,.beacon{animation:none}
   }
+
+  /* ---------- mobile scenery: zoom the scene so it reads at phone size ---------- */
+  @media(max-width:840px){
+    .scape .layer{left:-62vw;right:auto;width:222vw}
+    .squatch{height:26%}
+  }
 </style>
 </head>
 <body>
@@ -204,6 +213,13 @@
   </div>
 
   <div class="glow"></div>
+  <div class="sun" id="sun" aria-hidden="true">
+    <svg viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="46" fill="#ffe9a8" opacity=".7"/>
+      <circle cx="50" cy="50" r="38" fill="#ffe49a"/>
+      <circle cx="50" cy="50" r="29" fill="#fff3cf"/>
+    </svg>
+  </div>
   <div class="scape">
     <!-- Mount Rainier -->
     <div class="layer" data-speed="0.05" data-mx="2">
@@ -446,6 +462,8 @@
       for(const l of layers){
         l.style.transform = `translateY(${scrollY_ * parseFloat(l.dataset.speed)}px)`;
       }
+      const sun = document.getElementById('sun');
+      if(sun){ sun.style.transform = `translateY(${scrollY_ * 0.22}px)`; }px)`; }
     }
     ticking = false;
   }
