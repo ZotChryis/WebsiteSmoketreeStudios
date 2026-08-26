@@ -1,0 +1,5 @@
+# Smoketree Studios - authorized digital sellers for apps (IAB app-ads.txt)
+# Covers every app under AdMob publisher pub-8201405685514957,
+# which is both Lil Laundry Lane on Google Play and on the App Store.
+# Add one line per additional ad network if mediation is ever enabled.
+google.com, pub-8201405685514957, DIRECT, f08c47fec0942fa0
