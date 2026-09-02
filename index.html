@@ -463,7 +463,7 @@
         l.style.transform = `translateY(${scrollY_ * parseFloat(l.dataset.speed)}px)`;
       }
       const sun = document.getElementById('sun');
-      if(sun){ sun.style.transform = `translateY(${scrollY_ * 0.22}px)`; }px)`; }
+      if(sun){ sun.style.transform = `translateY(${scrollY_ * 0.22}px)`; }
     }
     ticking = false;
   }
@@ -473,7 +473,7 @@
   queue();
 
   const v = document.getElementById('logoVid');
-  v.addEventListener('ended', () => { v.pause(); });
+  if(v){ v.addEventListener('ended', () => { v.pause(); }); }
 </script>
 </body>
 </html>
